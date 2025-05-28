@@ -1,1109 +1,382 @@
- body {
-        font-family: 'Montserrat', sans-serif;
-        background-color: #f8fafc;
-    }
-    
-    .btn-primary {
-        background-color: var(--primary-blue);
-        color: white;
-        transition: all 0.3s ease;
-    }
-    
-    .btn-primary:hover {
-        background-color: #1c7ab0;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 6px rgba(36, 142, 204, 0.2);
-    }
-    
-    .accent {
-        color: var(--primary-blue);
-    }
-    
-    .accent-border {
-        border-color: var(--primary-blue);
-    }
-    
-    .yellow-accent {
-        color: var(--accent-yellow);
-    }
-    
-    .progress-bar {
-        height: 8px;
-        background-color: #e2e8f0;
-        border-radius: 4px;
-        overflow: hidden;
-    }
-    
-    .progress {
-        height: 100%;
-        background-color: var(--primary-blue);
-        transition: width 0.5s ease;
-    }
-    
-    .question-container {
-        opacity: 0;
-        transform: translateY(20px);
-        transition: all 0.5s ease;
-        display: none;
-    }
-    
-    .question-container.active {
-        opacity: 1;
-        transform: translateY(0);
-        display: block;
-    }
-    
-    .package-card {
-        border-left: 4px solid var(--primary-blue);
-        transition: all 0.3s ease;
-    }
-    
-    .package-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 15px rgba(36, 142, 204, 0.1);
-    }
-    
-    .feature-item {
-        position: relative;
-        padding-left: 1.5rem;
-    }
-    
-    .feature-item:before {
-        content: "✓";
-        position: absolute;
-        left: 0;
-        color: var(--primary-blue);
-        font-weight: bold;
-    }
-    
-    .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: 50;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-    
-    .modal.active {
-        display: flex;
-        opacity: 1;
-    }
-    
-    .modal-content {
-        transform: translateY(20px);
-        transition: transform 0.3s ease;
-    }
-    
-    .modal.active .modal-content {
-        transform: translateY(0);
-    }
-    
-    .camera-icon {
-        animation: float 3s ease-in-out infinite;
-    }
-    
-    @keyframes float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
-    }
-    
-    .social-icon {
-        transition: all 0.3s ease;
-    }
-    
-    .social-icon:hover {
-        transform: scale(1.1);
-    }
-    
-    .thank-you-section {
-        opacity: 0;
-        height: 0;
-        overflow: hidden;
-        transition: opacity 0.5s ease;
-    }
-    
-    .thank-you-section.active {
-        opacity: 1;
-        height: auto;
-        overflow: visible;
-    }
-    
-    @media (max-width: 640px) {
-        .container {
-            padding-left: 1rem;
-            padding-right: 1rem;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SN Salsa Photobooth Package Finder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f8f7fa;
         }
-    }
-</style>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Main Content -->
-    <main class="flex-grow container mx-auto px-4 py-8">
-        <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-6 md:p-8">
-            <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold text-gray-800 mb-2">Find Your Perfect Package</h2>
-                <p class="text-gray-600">Answer a few questions and we'll recommend the best photobooth package for your event</p>
-            </div>
-
-            <!-- Progress Bar -->
-            <div class="mb-8" id="progress-container">
-                <div class="flex justify-between text-sm text-gray-600 mb-2">
-                    <span>Getting Started</span>
-                    <span id="progress-text">Question 1 of 4</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress" id="progress-bar" style="width: 25%"></div>
-                </div>
-            </div>
-
-            <!-- Questionnaire Form -->
-            <form id="package-finder" class="space-y-8">
-                <!-- Question 1: Event Type -->
-                <div id="question-1" class="question-container active">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-4">What type of event are you having?</h3>
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-                        <label class="cursor-pointer">
-                            <input type="radio" name="event-type" value="Wedding" class="hidden peer" required>
-                            <div class="border-2 border-gray-200 rounded-lg p-4 text-center hover:border-blue-400 peer-checked:border-blue-500 peer-checked:bg-blue-50 transition-all">
-                                <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                                </svg>
-                                <span class="font-medium">Wedding</span>
-                            </div>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="event-type" value="Sweet 16" class="hidden peer">
-                            <div class="border-2 border-gray-200 rounded-lg p-4 text-center hover:border-blue-400 peer-checked:border-blue-500 peer-checked:bg-blue-50 transition-all">
-                                <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z"></path>
-                                </svg>
-                                <span class="font-medium">Sweet 16</span>
-                            </div>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="event-type" value="Birthday" class="hidden peer">
-                            <div class="border-2 border-gray-200 rounded-lg p-4 text-center hover:border-blue-400 peer-checked:border-blue-500 peer-checked:bg-blue-50 transition-all">
-                                <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z"></path>
-                                </svg>
-                                <span class="font-medium">Birthday</span>
-                            </div>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="event-type" value="School Event" class="hidden peer">
-                            <div class="border-2 border-gray-200 rounded-lg p-4 text-center hover:border-blue-400 peer-checked:border-blue-500 peer-checked:bg-blue-50 transition-all">
-                                <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                                </svg>
-                                <span class="font-medium">School Event</span>
-                            </div>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="event-type" value="Graduation Party" class="hidden peer">
-                            <div class="border-2 border-gray-200 rounded-lg p-4 text-center hover:border-blue-400 peer-checked:border-blue-500 peer-checked:bg-blue-50 transition-all">
-                                <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 14l9-5-9-5-9 5 9 5z"></path>
-                                    <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"></path>
-                                </svg>
-                                <span class="font-medium">Graduation</span>
-                            </div>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="event-type" value="Bridal Shower" class="hidden peer">
-                            <div class="border-2 border-gray-200 rounded-lg p-4 text-center hover:border-blue-400 peer-checked:border-blue-500 peer-checked:bg-blue-50 transition-all">
-                                <!-- Bridal Shower Icon (original) -->
-                                <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a4 4 0 118 0v7M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
-                                </svg>
-                                <span class="font-medium">Bridal Shower</span>
-                            </div>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="event-type" value="Baby Shower" class="hidden peer">
-                            <div class="border-2 border-gray-200 rounded-lg p-4 text-center hover:border-blue-400 peer-checked:border-blue-500 peer-checked:bg-blue-50 transition-all">
-                                <!-- Baby Shower Icon (original) -->
-                                <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                                </svg>
-                                <span class="font-medium">Baby Shower</span>
-                            </div>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="event-type" value="Holiday Party" class="hidden peer">
-                            <div class="border-2 border-gray-200 rounded-lg p-4 text-center hover:border-blue-400 peer-checked:border-blue-500 peer-checked:bg-blue-50 transition-all">
-                                <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
-                                </svg>
-                                <span class="font-medium">Holiday Party</span>
-                            </div>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="event-type" value="Other" class="hidden peer">
-                            <div class="border-2 border-gray-200 rounded-lg p-4 text-center hover:border-blue-400 peer-checked:border-blue-500 peer-checked:bg-blue-50 transition-all">
-                                <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                                <span class="font-medium">Other</span>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="mt-6 flex justify-end">
-                        <button type="button" class="btn-primary px-6 py-2 rounded-lg font-medium" onclick="nextQuestion(1)">Next</button>
-                    </div>
-                </div>
-
-                <!-- Question 2: Hours -->
-                <div id="question-2" class="question-container">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-4">How many hours would you like the photobooth in use?</h3>
-                    <div id="hours-options-container" class="grid grid-cols-2 md:grid-cols-3 gap-3">
-                        <!-- Hours options will be dynamically populated based on event type -->
-                    </div>
-                    <div class="mt-6 flex justify-between">
-                        <button type="button" class="text-gray-600 hover:text-blue-600 font-medium" onclick="prevQuestion(2)">Back</button>
-                        <button type="button" class="btn-primary px-6 py-2 rounded-lg font-medium" onclick="nextQuestion(2)">Next</button>
-                    </div>
-                </div>
-
-                <!-- Question 3: Features -->
-                <div id="question-3" class="question-container">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-4">What photobooth features are you interested in?</h3>
-                    <p class="text-gray-600 mb-4">Select all that apply</p>
-                    <div class="space-y-3">
-                        <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-blue-50 transition cursor-pointer">
-                            <input type="checkbox" name="features" value="Glam Feature" class="form-checkbox h-5 w-5 text-blue-500">
-                            <span class="font-medium">Glam Feature (Black and White Photos)</span>
-                        </label>
-                        <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-blue-50 transition cursor-pointer">
-                            <input type="checkbox" name="features" value="GIFs" class="form-checkbox h-5 w-5 text-blue-500">
-                            <span class="font-medium">GIFs</span>
-                        </label>
-                        <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-blue-50 transition cursor-pointer">
-                            <input type="checkbox" name="features" value="Boomerang" class="form-checkbox h-5 w-5 text-blue-500">
-                            <span class="font-medium">Boomerang</span>
-                        </label>
-                        <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-blue-50 transition cursor-pointer">
-                            <input type="checkbox" name="features" value="Filters" class="form-checkbox h-5 w-5 text-blue-500">
-                            <span class="font-medium">Filters</span>
-                        </label>
-                        <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-blue-50 transition cursor-pointer">
-                            <input type="checkbox" name="features" value="Multiple Templates" class="form-checkbox h-5 w-5 text-blue-500">
-                            <span class="font-medium">Multiple Templates</span>
-                        </label>
-                    </div>
-                    <div class="mt-6 flex justify-between">
-                        <button type="button" class="text-gray-600 hover:text-blue-600 font-medium" onclick="prevQuestion(3)">Back</button>
-                        <button type="button" class="btn-primary px-6 py-2 rounded-lg font-medium" onclick="nextQuestion(3)">Next</button>
-                    </div>
-                </div>
-
-                <!-- Question 4: Fun -->
-                <div id="question-4" class="question-container">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Do you want to add some fun to your event for you and your guests?</h3>
-                    <div class="grid grid-cols-1 gap-4">
-                        <label class="cursor-pointer">
-                            <input type="radio" name="fun" value="Yes" class="hidden peer" required>
-                            <div class="border-2 border-gray-200 rounded-lg p-6 text-center hover:border-blue-400 peer-checked:border-blue-500 peer-checked:bg-blue-50 transition-all">
-                                <span class="text-3xl block mb-2">😄</span>
-                                <span class="font-medium">Absolutely!</span>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="mt-6 flex justify-between">
-                        <button type="button" class="text-gray-600 hover:text-blue-600 font-medium" onclick="prevQuestion(4)">Back</button>
-                        <button type="submit" class="btn-primary px-6 py-2 rounded-lg font-medium">Find My Package</button>
-                    </div>
-                </div>
+        
+        .header-gradient {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+        }
+        
+        .package-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .package-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+    </style>
+</head>
+<body>
+    <header class="header-gradient text-white py-8 px-4 md:px-8 text-center">
+        <h1 class="text-3xl md:text-4xl font-bold mb-2">SN Salsa Photobooth</h1>
+        <p class="text-xl md:text-2xl">Find Your Perfect Package</p>
+    </header>
+    
+    <main class="container mx-auto px-4 py-8">
+        <section class="mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-8">What's Your Event Type?</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <button id="wedding" class="event-type bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow text-center">
+                    <div class="text-4xl mb-3">💍</div>
+                    <h3 class="text-xl font-semibold">Wedding</h3>
+                </button>
                 
-                <!-- Thank You Section (Initially Hidden) -->
-                <div id="thank-you-section" class="thank-you-section">
-                    <div class="text-center mb-6">
-                        <div class="inline-block p-3 bg-blue-100 rounded-full mb-4">
-                            <svg class="w-12 h-12 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Thank You!</h3>
-                        <p class="text-gray-600">We've found the perfect package for your event.</p>
-                    </div>
-                    
-                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg mb-6">
-                        <h4 class="font-bold text-lg text-gray-800 mb-2" id="package-name">Your Recommended Package</h4>
-                        <div id="package-details" class="text-gray-700"></div>
-                    </div>
-                    
-                    <div id="wedding-hours-note" class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-r-lg mb-6 hidden">
-                        <h4 class="font-bold text-lg text-gray-800 mb-2">Additional Hours Available</h4>
-                        <p class="text-gray-700">Need more time for your wedding? Additional hours can be added to your package. Contact us for details!</p>
-                    </div>
-                    
-                    <div id="add-on-message" class="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg mb-6 hidden">
-                        <h4 class="font-bold text-lg text-gray-800 mb-2">Add-On Options Available</h4>
-                        <p class="text-gray-700" id="add-on-text"></p>
-                    </div>
-                    
-                    <p class="text-gray-600 mb-6 text-center">Ready to book or have questions? Contact us today!</p>
-                    
-                    <div class="grid grid-cols-1 gap-4">
-                        <a href="mailto:haley@116entertainment.live" class="btn-primary py-3 px-4 rounded-lg font-medium text-center flex items-center justify-center">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                            </svg>
-                            Email Us
-                        </a>
-                    </div>
-                    
-                    <div class="mt-8 text-center">
-                        <button type="button" onclick="resetForm()" class="text-blue-600 hover:text-blue-800 font-medium">
-                            Start Over
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
+                <button id="corporate" class="event-type bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow text-center">
+                    <div class="text-4xl mb-3">🏢</div>
+                    <h3 class="text-xl font-semibold">Corporate Event</h3>
+                </button>
+                
+                <button id="birthday" class="event-type bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow text-center">
+                    <div class="text-4xl mb-3">🎂</div>
+                    <h3 class="text-xl font-semibold">Birthday Party</h3>
+                </button>
+                
+                <button id="graduation" class="event-type bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow text-center">
+                    <div class="text-4xl mb-3">🎓</div>
+                    <h3 class="text-xl font-semibold">Graduation</h3>
+                </button>
+                
+                <button id="reunion" class="event-type bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow text-center">
+                    <div class="text-4xl mb-3">👨‍👩‍👧‍👦</div>
+                    <h3 class="text-xl font-semibold">Reunion</h3>
+                </button>
+                
+                <button id="other" class="event-type bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow text-center">
+                    <div class="text-4xl mb-3">🎉</div>
+                    <h3 class="text-xl font-semibold">Other Celebration</h3>
+                </button>
+            </div>
+        </section>
+        
+        <section id="guest-count" class="mb-12 hidden">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-8">How Many Guests Are You Expecting?</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <button id="small" class="guest-size bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow text-center">
+                    <div class="text-4xl mb-3">👤</div>
+                    <h3 class="text-xl font-semibold">Small (Up to 50)</h3>
+                </button>
+                
+                <button id="medium" class="guest-size bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow text-center">
+                    <div class="text-4xl mb-3">👥</div>
+                    <h3 class="text-xl font-semibold">Medium (51-150)</h3>
+                </button>
+                
+                <button id="large" class="guest-size bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow text-center">
+                    <div class="text-4xl mb-3">👥👥</div>
+                    <h3 class="text-xl font-semibold">Large (150+)</h3>
+                </button>
+            </div>
+        </section>
+        
+        <section id="duration" class="mb-12 hidden">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-8">How Long Do You Need The Photobooth?</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <button id="short" class="duration-option bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow text-center">
+                    <div class="text-4xl mb-3">⏱️</div>
+                    <h3 class="text-xl font-semibold">2 Hours</h3>
+                </button>
+                
+                <button id="medium-time" class="duration-option bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow text-center">
+                    <div class="text-4xl mb-3">⏲️</div>
+                    <h3 class="text-xl font-semibold">3-4 Hours</h3>
+                </button>
+                
+                <button id="long" class="duration-option bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow text-center">
+                    <div class="text-4xl mb-3">🕰️</div>
+                    <h3 class="text-xl font-semibold">5+ Hours</h3>
+                </button>
+            </div>
+        </section>
+        
+        <section id="results" class="hidden">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-8">Recommended Packages</h2>
+            
+            <div id="packages-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Packages will be inserted here by JavaScript -->
+            </div>
+            
+            <div class="text-center mt-12">
+                <button id="restart" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-6 rounded-lg transition-colors">
+                    Start Over
+                </button>
+                <a href="mailto:contact@snsalsaphotobooth.com" class="inline-block bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white font-semibold py-3 px-6 rounded-lg ml-4 transition-colors">
+                    Contact Us
+                </a>
+            </div>
+        </section>
     </main>
-
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8">
-        <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-6 md:mb-0">
-                    <h2 class="text-xl font-bold mb-2">S&N Salsa Photobooth</h2>
-                    <p class="text-gray-300">Capture the moment, keep the memory</p>
-                </div>
-                <div class="flex space-x-4">
-                    <a href="mailto:haley@116entertainment.live" class="social-icon">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                        </svg>
-                    </a>
-                </div>
-            </div>
-            <div class="mt-8 text-center text-gray-400 text-sm">
-                <p>&copy; 2023 S&N Salsa Photobooth. All rights reserved.</p>
-            </div>
-        </div>
+    
+    <footer class="bg-gray-800 text-white py-6 px-4 text-center">
+        <p>© 2023 SN Salsa Photobooth. All rights reserved.</p>
+        <p class="mt-2">
+            <a href="#" class="text-gray-300 hover:text-white mx-2">Terms</a>
+            <a href="#" class="text-gray-300 hover:text-white mx-2">Privacy</a>
+            <a href="#" class="text-gray-300 hover:text-white mx-2">Contact</a>
+        </p>
     </footer>
-</div>
 
-<!-- Price Info Modal -->
-<div id="price-modal" class="modal">
-    <div class="modal-content bg-white max-w-md mx-auto my-auto rounded-lg shadow-xl p-6">
-        <div class="flex justify-between items-center mb-4">
-            <h3 class="text-xl font-bold text-gray-800" id="price-modal-title">Package Information</h3>
-            <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-            </button>
-        </div>
-        <p id="price-modal-content" class="text-gray-600 text-lg font-medium"></p>
-        <div class="mt-6">
-            <button onclick="closeModal()" class="btn-primary w-full py-2 rounded-lg font-medium">Got it</button>
-        </div>
-    </div>
-</div>
-
-<script>
-    // Package data (without prices shown to clients)
-    const packages = {
-        wedding: {
-            silver: {
-                name: "Silver Wedding Package",
-                price: "$800",
-                hours: 3,
+    <script>
+        // Package data
+        const packages = [
+            {
+                name: "Basic Package",
+                price: "$399",
+                description: "Perfect for small gatherings and short events",
                 features: [
-                    "2 Personalized Template Designs",
-                    "Guests receive pictures via Email and Text",
-                    "Downloadable Secure Online Event Gallery (after event)",
-                    "Backdrop Included",
-                    "Photobooth Attendant",
-                    "Set Up and Take Down Included"
+                    "2 hours of booth time",
+                    "Unlimited prints",
+                    "Digital gallery",
+                    "Basic props",
+                    "Standard backdrop"
                 ],
-                includes: ["Basic Templates"]
+                bestFor: ["small", "short", "birthday", "graduation"],
+                image: "📸"
             },
-            gold: {
-                name: "Gold Wedding Package",
-                price: "$1000",
-                hours: 4,
+            {
+                name: "Standard Package",
+                price: "$599",
+                description: "Our most popular option for medium-sized events",
                 features: [
-                    "3 Different Personalized Template Designs",
-                    "Guests receive pictures via Email and Text",
-                    "Downloadable Secure Online Event Gallery (after event)",
-                    "Backdrop Included",
-                    "Photobooth Attendant",
-                    "Set Up and Take Down Included",
-                    "GIFS, Boomerangs",
-                    "Share Images via Email, Text and QR Code",
-                    "Themed Props"
+                    "3 hours of booth time",
+                    "Unlimited prints",
+                    "Digital gallery",
+                    "Premium props",
+                    "2 backdrop options",
+                    "Guest book"
                 ],
-                includes: ["GIFs", "Boomerang", "Multiple Templates", "Themed Props"]
+                bestFor: ["medium", "medium-time", "wedding", "reunion", "corporate"],
+                image: "📸📸"
             },
-            platinum: {
-                name: "Platinum Wedding Package",
-                price: "$1,200",
-                hours: 6,
+            {
+                name: "Premium Package",
+                price: "$899",
+                description: "The ultimate photobooth experience for your special day",
                 features: [
-                    "4-5 Personalized Template Designs",
-                    "Guests receive pictures via Email and Text",
-                    "Downloadable Secure Online Event Gallery (after event)",
-                    "Backdrop Included",
-                    "Photobooth Attendant",
-                    "Set Up and Take Down Included",
-                    "GIFS, Boomerangs",
-                    "Themed Props",
-                    "Share Pictures via Email and Text, QR Code and AirDrop (wifi accessed required)",
-                    "Glam Feature (Black and White Photos)"
+                    "5 hours of booth time",
+                    "Unlimited prints",
+                    "Digital gallery with instant sharing",
+                    "Deluxe props collection",
+                    "Custom backdrop",
+                    "Guest book with attendant",
+                    "Video messaging feature"
                 ],
-                includes: ["GIFs", "Boomerang", "Multiple Templates", "Filters", "Glam Feature", "Themed Props"]
+                bestFor: ["large", "long", "wedding", "corporate"],
+                image: "📸📸📸"
+            },
+            {
+                name: "Corporate Special",
+                price: "$799",
+                description: "Tailored for professional events and brand promotion",
+                features: [
+                    "4 hours of booth time",
+                    "Branded photo templates",
+                    "Logo integration",
+                    "Digital marketing integration",
+                    "Professional attendant",
+                    "Post-event analytics"
+                ],
+                bestFor: ["medium", "large", "medium-time", "long", "corporate"],
+                image: "🏢📸"
+            },
+            {
+                name: "Party Starter",
+                price: "$499",
+                description: "Fun and affordable option for birthday parties and casual gatherings",
+                features: [
+                    "3 hours of booth time",
+                    "Unlimited prints",
+                    "Fun props and signs",
+                    "Digital gallery",
+                    "Social media sharing station"
+                ],
+                bestFor: ["small", "medium", "medium-time", "birthday", "reunion", "other"],
+                image: "🎉📸"
+            },
+            {
+                name: "Deluxe Wedding Package",
+                price: "$1,199",
+                description: "Our most comprehensive package for your special day",
+                features: [
+                    "6 hours of booth time",
+                    "Unlimited premium prints",
+                    "Custom photo template design",
+                    "Luxury backdrop options",
+                    "Deluxe props collection",
+                    "Elegant guest book with attendant",
+                    "Online gallery with unlimited downloads",
+                    "Video messaging feature"
+                ],
+                bestFor: ["medium", "large", "long", "wedding"],
+                image: "💍📸"
             }
-        },
-        birthday: {
-            silver: {
-                name: "Silver Birthday Package",
-                price: "$300",
-                hours: 2,
-                features: [
-                    "2 Personalized Template Designs",
-                    "Share Pictures via Email and Text",
-                    "Downloadable Secure Online Event Gallery (after event)",
-                    "Backdrop Included",
-                    "Photobooth Attendant",
-                    "Set Up and Take Down Included"
-                ],
-                includes: ["Basic Templates"]
-            },
-            gold: {
-                name: "Gold Birthday Package",
-                price: "$400",
-                hours: 3,
-                features: [
-                    "3 Personalized Template Designs",
-                    "Share Pictures via Email and Text",
-                    "Downloadable Secure Online Event Gallery (after event)",
-                    "Backdrop Included",
-                    "Photobooth Attendant",
-                    "Set Up and Take Down Included",
-                    "GIFS, Boomerangs",
-                    "Share Images via Email, Text and QR Code",
-                    "Themed Props"
-                ],
-                includes: ["GIFs", "Boomerang", "Multiple Templates", "Themed Props"]
-            },
-            platinum: {
-                name: "Platinum Birthday Package",
-                price: "$500",
-                hours: 4,
-                features: [
-                    "4 Personalized Template Designs",
-                    "Share Pictures via Email and Text",
-                    "Downloadable Secure Online Event Gallery (after event)",
-                    "Backdrop Included",
-                    "Photobooth Attendant",
-                    "Set Up and Take Down Included",
-                    "GIFS, Boomerangs",
-                    "Share Pictures via Email and Text, QR Code and AirDrop",
-                    "Glam Feature"
-                ],
-                includes: ["GIFs", "Boomerang", "Multiple Templates", "Filters", "Glam Feature", "Themed Props"]
-            }
-        },
-        bridalShower: {
-            silver: {
-                name: "Miss to Mrs. Minis – sweet & simple fun",
-                price: "$300",
-                hours: 2,
-                features: [
-                    "2 Personalized Template Designs",
-                    "Share Pictures via Email and Text",
-                    "Downloadable Secure Online Event Gallery (after event)",
-                    "Backdrop Included",
-                    "Photobooth Attendant",
-                    "Set Up and Take Down Included"
-                ],
-                includes: ["Basic Templates"]
-            },
-            gold: {
-                name: "Bride Vibes Booth – more time, more glam",
-                price: "$400",
-                hours: 3,
-                features: [
-                    "3 Personalized Template Designs",
-                    "Share Pictures via Email and Text",
-                    "Downloadable Secure Online Event Gallery (after event)",
-                    "Backdrop Included",
-                    "Photobooth Attendant",
-                    "Set Up and Take Down Included",
-                    "GIFS, Boomerangs",
-                    "Share Images via Email, Text and QR Code",
-                    "Themed Props"
-                ],
-                includes: ["GIFs", "Boomerang", "Multiple Templates", "Themed Props"]
-            },
-            platinum: {
-                name: "Love & Lens Luxe – full experience, picture-perfect",
-                price: "$500",
-                hours: 4,
-                features: [
-                    "4 Personalized Template Designs",
-                    "Share Pictures via Email and Text",
-                    "Downloadable Secure Online Event Gallery (after event)",
-                    "Backdrop Included",
-                    "Photobooth Attendant",
-                    "Set Up and Take Down Included",
-                    "GIFS, Boomerangs",
-                    "Share Pictures via Email and Text, QR Code and AirDrop",
-                    "Glam Feature"
-                ],
-                includes: ["GIFs", "Boomerang", "Multiple Templates", "Filters", "Glam Feature", "Themed Props"]
-            }
-        },
-        graduation: {
-            silver: {
-                name: "Grad & Go – quick and celebratory",
-                price: "$300",
-                hours: 2,
-                features: [
-                    "2 Personalized Template Designs",
-                    "Share Pictures via Email and Text",
-                    "Downloadable Secure Online Event Gallery (after event)",
-                    "Backdrop Included",
-                    "Photobooth Attendant",
-                    "Set Up and Take Down Included"
-                ],
-                includes: ["Basic Templates"]
-            },
-            gold: {
-                name: "Cap & Capture – more time and photo fun",
-                price: "$400",
-                hours: 3,
-                features: [
-                    "3 Personalized Template Designs",
-                    "Share Pictures via Email and Text",
-                    "Downloadable Secure Online Event Gallery (after event)",
-                    "Backdrop Included",
-                    "Photobooth Attendant",
-                    "Set Up and Take Down Included",
-                    "GIFS, Boomerangs",
-                    "Share Images via Email, Text and QR Code",
-                    "Themed Props"
-                ],
-                includes: ["GIFs", "Boomerang", "Multiple Templates", "Themed Props"]
-            },
-            platinum: {
-                name: "Diploma Dreams – premium experience with full customization",
-                price: "$500",
-                hours: 4,
-                features: [
-                    "4 Personalized Template Designs",
-                    "Share Pictures via Email and Text",
-                    "Downloadable Secure Online Event Gallery (after event)",
-                    "Backdrop Included",
-                    "Photobooth Attendant",
-                    "Set Up and Take Down Included",
-                    "GIFS, Boomerangs",
-                    "Share Pictures via Email and Text, QR Code and AirDrop",
-                    "Glam Feature"
-                ],
-                includes: ["GIFs", "Boomerang", "Multiple Templates", "Filters", "Glam Feature", "Themed Props"]
-            }
-        },
-        babyShower: {
-            silver: {
-                name: "Little Giggles – basic setup with cute flair",
-                price: "$300",
-                hours: 2,
-                features: [
-                    "2 Personalized Template Designs",
-                    "Share Pictures via Email and Text",
-                    "Downloadable Secure Online Event Gallery (after event)",
-                    "Backdrop Included",
-                    "Photobooth Attendant",
-                    "Set Up and Take Down Included"
-                ],
-                includes: ["Basic Templates"]
-            },
-            gold: {
-                name: "Bundle of Snaps – more time, more fun",
-                price: "$400",
-                hours: 3,
-                features: [
-                    "3 Personalized Template Designs",
-                    "Share Pictures via Email and Text",
-                    "Downloadable Secure Online Event Gallery (after event)",
-                    "Backdrop Included",
-                    "Photobooth Attendant",
-                    "Set Up and Take Down Included",
-                    "GIFS, Boomerangs",
-                    "Share Images via Email, Text and QR Code",
-                    "Themed Props"
-                ],
-                includes: ["GIFs", "Boomerang", "Multiple Templates", "Themed Props"]
-            },
-            platinum: {
-                name: "Tiny Toes & Poses",
-                price: "$500",
-                hours: 4,
-                features: [
-                    "4 Personalized Template Designs",
-                    "Share Pictures via Email and Text",
-                    "Downloadable Secure Online Event Gallery (after event)",
-                    "Backdrop Included",
-                    "Photobooth Attendant",
-                    "Set Up and Take Down Included",
-                    "GIFS, Boomerangs",
-                    "Share Pictures via Email and Text, QR Code and AirDrop",
-                    "Glam Feature"
-                ],
-                includes: ["GIFs", "Boomerang", "Multiple Templates", "Filters", "Glam Feature", "Themed Props"]
-            }
-        },
-        holidayParty: {
-            silver: {
-                name: "Holiday Cheer Package",
-                price: "$300",
-                hours: 2,
-                features: [
-                    "2 Personalized Template Designs",
-                    "Share Pictures via Email and Text",
-                    "Downloadable Secure Online Event Gallery (after event)",
-                    "Backdrop Included",
-                    "Photobooth Attendant",
-                    "Set Up and Take Down Included"
-                ],
-                includes: ["Basic Templates"]
-            },
-            gold: {
-                name: "Holiday Joy Package",
-                price: "$400",
-                hours: 3,
-                features: [
-                    "3 Personalized Template Designs",
-                    "Share Pictures via Email and Text",
-                    "Downloadable Secure Online Event Gallery (after event)",
-                    "Backdrop Included",
-                    "Photobooth Attendant",
-                    "Set Up and Take Down Included",
-                    "GIFS, Boomerangs",
-                    "Share Images via Email, Text and QR Code",
-                    "Themed Props"
-                ],
-                includes: ["GIFs", "Boomerang", "Multiple Templates", "Themed Props"]
-            },
-            platinum: {
-                name: "Holiday Celebration Package",
-                price: "$500",
-                hours: 4,
-                features: [
-                    "4 Personalized Template Designs",
-                    "Share Pictures via Email and Text",
-                    "Downloadable Secure Online Event Gallery (after event)",
-                    "Backdrop Included",
-                    "Photobooth Attendant",
-                    "Set Up and Take Down Included",
-                    "GIFS, Boomerangs",
-                    "Share Pictures via Email and Text, QR Code and AirDrop",
-                    "Glam Feature"
-                ],
-                includes: ["GIFs", "Boomerang", "Multiple Templates", "Filters", "Glam Feature", "Themed Props"]
-            }
-        },
-        schoolEvent: {
-            silver: {
-                name: "Silver School Package",
-                price: "$300",
-                hours: 2,
-                features: [
-                    "2 Personalized Template Designs",
-                    "Share Pictures via Email and Text",
-                    "Downloadable Secure Online Event Gallery (after event)",
-                    "Backdrop Included",
-                    "Photobooth Attendant",
-                    "Set Up and Take Down Included"
-                ],
-                includes: ["Basic Templates"]
-            },
-            gold: {
-                name: "Gold School Package",
-                price: "$400",
-                hours: 3,
-                features: [
-                    "3 Personalized Template Designs",
-                    "Share Pictures via Email and Text",
-                    "Downloadable Secure Online Event Gallery (after event)",
-                    "Backdrop Included",
-                    "Photobooth Attendant",
-                    "Set Up and Take Down Included",
-                    "GIFS, Boomerangs",
-                    "Share Images via Email, Text and QR Code",
-                    "Themed Props"
-                ],
-                includes: ["GIFs", "Boomerang", "Multiple Templates", "Themed Props"]
-            },
-            platinum: {
-                name: "Platinum School Package",
-                price: "$500",
-                hours: 4,
-                features: [
-                    "4 Personalized Template Designs",
-                    "Share Pictures via Email and Text",
-                    "Downloadable Secure Online Event Gallery (after event)",
-                    "Backdrop Included",
-                    "Photobooth Attendant",
-                    "Set Up and Take Down Included",
-                    "GIFS, Boomerangs",
-                    "Share Pictures via Email and Text, QR Code and AirDrop",
-                    "Glam Feature"
-                ],
-                includes: ["GIFs", "Boomerang", "Multiple Templates", "Filters", "Glam Feature", "Themed Props"]
-            }
-        },
-        other: {
-            silver: {
-                name: "Silver Package",
-                price: "$300",
-                hours: 2,
-                features: [
-                    "2 Personalized Template Designs",
-                    "Share Pictures via Email and Text",
-                    "Downloadable Secure Online Event Gallery (after event)",
-                    "Backdrop Included",
-                    "Photobooth Attendant",
-                    "Set Up and Take Down Included"
-                ],
-                includes: ["Basic Templates"]
-            },
-            gold: {
-                name: "Gold Package",
-                price: "$400",
-                hours: 3,
-                features: [
-                    "3 Personalized Template Designs",
-                    "Share Pictures via Email and Text",
-                    "Downloadable Secure Online Event Gallery (after event)",
-                    "Backdrop Included",
-                    "Photobooth Attendant",
-                    "Set Up and Take Down Included",
-                    "GIFS, Boomerangs",
-                    "Share Images via Email, Text and QR Code",
-                    "Themed Props"
-                ],
-                includes: ["GIFs", "Boomerang", "Multiple Templates", "Themed Props"]
-            },
-            platinum: {
-                name: "Platinum Package",
-                price: "$500",
-                hours: 4,
-                features: [
-                    "4 Personalized Template Designs",
-                    "Share Pictures via Email and Text",
-                    "Downloadable Secure Online Event Gallery (after event)",
-                    "Backdrop Included",
-                    "Photobooth Attendant",
-                    "Set Up and Take Down Included",
-                    "GIFS, Boomerangs",
-                    "Share Pictures via Email and Text, QR Code and AirDrop",
-                    "Glam Feature"
-                ],
-                includes: ["GIFs", "Boomerang", "Multiple Templates", "Filters", "Glam Feature", "Themed Props"]
-            }
-        }
-    };
-
-    // Current question tracking
-    let currentQuestion = 1;
-    const totalQuestions = 4;
-    let selectedEventType = '';
-
-    // Show/hide questions
-    function showQuestion(questionNumber) {
-        // Hide all questions
-        document.querySelectorAll('.question-container').forEach(q => {
-            q.classList.remove('active');
+        ];
+        
+        // Variables to store user selections
+        let selectedEvent = "";
+        let selectedSize = "";
+        let selectedDuration = "";
+        
+        // Add event listeners to event type buttons
+        document.querySelectorAll('.event-type').forEach(button => {
+            button.addEventListener('click', function() {
+                selectedEvent = this.id;
+                document.querySelectorAll('.event-type').forEach(btn => {
+                    btn.classList.remove('ring-4', 'ring-pink-500');
+                });
+                this.classList.add('ring-4', 'ring-pink-500');
+                
+                document.getElementById('guest-count').classList.remove('hidden');
+                document.getElementById('guest-count').scrollIntoView({ behavior: 'smooth' });
+            });
         });
         
-        // Show the current question
-        const currentQuestionElement = document.getElementById(`question-${questionNumber}`);
-        currentQuestionElement.classList.add('active');
+        // Add event listeners to guest size buttons
+        document.querySelectorAll('.guest-size').forEach(button => {
+            button.addEventListener('click', function() {
+                selectedSize = this.id;
+                document.querySelectorAll('.guest-size').forEach(btn => {
+                    btn.classList.remove('ring-4', 'ring-pink-500');
+                });
+                this.classList.add('ring-4', 'ring-pink-500');
+                
+                document.getElementById('duration').classList.remove('hidden');
+                document.getElementById('duration').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
         
-        // Update progress bar
-        const progressPercent = ((questionNumber - 1) / (totalQuestions - 1)) * 100;
-        document.getElementById('progress-bar').style.width = `${progressPercent}%`;
-        document.getElementById('progress-text').textContent = `Question ${questionNumber} of ${totalQuestions}`;
+        // Add event listeners to duration buttons
+        document.querySelectorAll('.duration-option').forEach(button => {
+            button.addEventListener('click', function() {
+                selectedDuration = this.id;
+                document.querySelectorAll('.duration-option').forEach(btn => {
+                    btn.classList.remove('ring-4', 'ring-pink-500');
+                });
+                this.classList.add('ring-4', 'ring-pink-500');
+                
+                showResults();
+            });
+        });
         
-        // If showing the hours question, update options based on event type
-        if (questionNumber === 2) {
-            updateHoursOptions();
-        }
-    }
-
-    // Update hours options based on event type
-    function updateHoursOptions() {
-        const hoursContainer = document.getElementById('hours-options-container');
-        hoursContainer.innerHTML = '';
-        
-        // Get selected event type
-        selectedEventType = document.querySelector('input[name="event-type"]:checked').value;
-        
-        // Create different hour options based on event type
-        if (selectedEventType === 'Wedding') {
-            // Wedding only shows 3, 4, and 6 hours
-            const weddingHours = [3, 4, 6];
+        // Function to show results
+        function showResults() {
+            // Filter packages based on user selections
+            const recommendedPackages = packages.filter(pkg => {
+                return pkg.bestFor.includes(selectedEvent) || 
+                       pkg.bestFor.includes(selectedSize) || 
+                       pkg.bestFor.includes(selectedDuration);
+            });
             
-            weddingHours.forEach(hour => {
-                const hourOption = document.createElement('label');
-                hourOption.className = 'cursor-pointer';
-                hourOption.innerHTML = `
-                    <input type="radio" name="hours" value="${hour}" class="hidden peer" required>
-                    <div class="border-2 border-gray-200 rounded-lg p-4 text-center hover:border-blue-400 peer-checked:border-blue-500 peer-checked:bg-blue-50 transition-all">
-                        <span class="text-2xl font-bold block mb-1">${hour}</span>
-                        <span class="font-medium">Hours</span>
+            // Sort packages by relevance (how many criteria they match)
+            recommendedPackages.sort((a, b) => {
+                const aMatches = countMatches(a.bestFor);
+                const bMatches = countMatches(b.bestFor);
+                return bMatches - aMatches;
+            });
+            
+            // Display packages
+            const packagesContainer = document.getElementById('packages-container');
+            packagesContainer.innerHTML = '';
+            
+            if (recommendedPackages.length === 0) {
+                packagesContainer.innerHTML = `
+                    <div class="col-span-full text-center py-8">
+                        <p class="text-xl">No packages match your criteria. Please try different options or contact us for a custom quote.</p>
                     </div>
                 `;
-                hoursContainer.appendChild(hourOption);
+            } else {
+                recommendedPackages.forEach(pkg => {
+                    const featuresList = pkg.features.map(feature => 
+                        `<li class="flex items-start mb-2">
+                            <span class="text-green-500 mr-2">✓</span>
+                            <span>${feature}</span>
+                        </li>`
+                    ).join('');
+                    
+                    const card = document.createElement('div');
+                    card.className = 'package-card bg-white rounded-lg overflow-hidden shadow-lg';
+                    card.innerHTML = `
+                        <div class="p-6">
+                            <div class="text-4xl mb-4 text-center">${pkg.image}</div>
+                            <h3 class="text-xl font-bold mb-2">${pkg.name}</h3>
+                            <p class="text-2xl font-bold text-pink-600 mb-4">${pkg.price}</p>
+                            <p class="text-gray-600 mb-4">${pkg.description}</p>
+                            <ul class="mb-6">
+                                ${featuresList}
+                            </ul>
+                            <a href="mailto:contact@snsalsaphotbooth.com?subject=Inquiry about ${pkg.name}" class="block text-center bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                                Book This Package
+                            </a>
+                        </div>
+                    `;
+                    packagesContainer.appendChild(card);
+                });
+            }
+            
+            // Show results section
+            document.getElementById('results').classList.remove('hidden');
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Helper function to count how many criteria a package matches
+        function countMatches(bestFor) {
+            let count = 0;
+            if (bestFor.includes(selectedEvent)) count++;
+            if (bestFor.includes(selectedSize)) count++;
+            if (bestFor.includes(selectedDuration)) count++;
+            return count;
+        }
+        
+        // Add event listener to restart button
+        document.getElementById('restart').addEventListener('click', function() {
+            // Reset selections
+            selectedEvent = "";
+            selectedSize = "";
+            selectedDuration = "";
+            
+            // Remove selection styling
+            document.querySelectorAll('.event-type, .guest-size, .duration-option').forEach(btn => {
+                btn.classList.remove('ring-4', 'ring-pink-500');
             });
-        } else {
-            // Non-wedding events show 2, 3, and 4 hours
-            const nonWeddingHours = [2, 3, 4];
             
-            nonWeddingHours.forEach(hour => {
-                const hourOption = document.createElement('label');
-                hourOption.className = 'cursor-pointer';
-                hourOption.innerHTML = `
-                    <input type="radio" name="hours" value="${hour}" class="hidden peer" required>
-                    <div class="border-2 border-gray-200 rounded-lg p-4 text-center hover:border-blue-400 peer-checked:border-blue-500 peer-checked:bg-blue-50 transition-all">
-                        <span class="text-2xl font-bold block mb-1">${hour}</span>
-                        <span class="font-medium">Hours</span>
-                    </div>
-                `;
-                hoursContainer.appendChild(hourOption);
-            });
-        }
-    }
-
-    // Next question
-    function nextQuestion(currentQuestionNum) {
-        // Validate current question
-        if (!validateQuestion(currentQuestionNum)) {
-            return;
-        }
-        
-        // If it's the first question (event type), show price info
-        if (currentQuestionNum === 1) {
-            const eventType = document.querySelector('input[name="event-type"]:checked').value;
-            showPriceInfo(eventType);
-        }
-        
-        currentQuestion = currentQuestionNum + 1;
-        showQuestion(currentQuestion);
-    }
-
-    // Previous question
-    function prevQuestion(currentQuestionNum) {
-        currentQuestion = currentQuestionNum - 1;
-        showQuestion(currentQuestion);
-    }
-
-    // Validate question
-    function validateQuestion(questionNum) {
-        switch(questionNum) {
-            case 1:
-                const eventTypeSelected = document.querySelector('input[name="event-type"]:checked');
-                if (!eventTypeSelected) {
-                    alert('Please select an event type');
-                    return false;
-                }
-                return true;
-            case 2:
-                const hoursSelected = document.querySelector('input[name="hours"]:checked');
-                if (!hoursSelected) {
-                    alert('Please select how many hours you need');
-                    return false;
-                }
-                return true;
-            case 3:
-                // Features are optional, so no validation needed
-                return true;
-            case 4:
-                const funSelected = document.querySelector('input[name="fun"]:checked');
-                if (!funSelected) {
-                    alert('Please answer the question');
-                    return false;
-                }
-                return true;
-            default:
-                return true;
-        }
-    }
-
-    // Show price info modal
-    function showPriceInfo(eventType) {
-        const modal = document.getElementById('price-modal');
-        const modalTitle = document.getElementById('price-modal-title');
-        const modalContent = document.getElementById('price-modal-content');
-        
-        if (eventType === 'Wedding') {
-            modalTitle.textContent = 'Wedding Packages';
-            modalContent.textContent = 'Wedding Packages starting at $800';
-        } else {
-            modalTitle.textContent = 'Event Packages';
-            modalContent.textContent = 'Event Packages starting at $300';
-        }
-        
-        modal.classList.add('active');
-    }
-
-    // Close price info modal
-    function closeModal() {
-        document.getElementById('price-modal').classList.remove('active');
-    }
-
-    // Reset form
-    function resetForm() {
-        document.getElementById('package-finder').reset();
-        document.getElementById('thank-you-section').classList.remove('active');
-        document.getElementById('progress-container').style.display = 'block';
-        document.getElementById('wedding-hours-note').classList.add('hidden');
-        document.getElementById('add-on-message').classList.add('hidden');
-        selectedEventType = '';
-        showQuestion(1);
-    }
-
-    // Form submission
-    document.getElementById('package-finder').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Get form values
-        const eventType = document.querySelector('input[name="event-type"]:checked').value;
-        const hours = parseInt(document.querySelector('input[name="hours"]:checked').value);
-        
-        // Get selected features
-        const selectedFeatures = [];
-        document.querySelectorAll('input[name="features"]:checked').forEach(checkbox => {
-            selectedFeatures.push(checkbox.value);
+            // Hide sections
+            document.getElementById('guest-count').classList.add('hidden');
+            document.getElementById('duration').classList.add('hidden');
+            document.getElementById('results').classList.add('hidden');
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
-        
-        // Determine package type based on event type
-        let packageType;
-        switch(eventType) {
-            case 'Wedding':
-                packageType = 'wedding';
-                break;
-            case 'Bridal Shower':
-                packageType = 'bridalShower';
-                break;
-            case 'Baby Shower':
-                packageType = 'babyShower';
-                break;
-            case 'Graduation Party':
-            case 'Graduation':
-                packageType = 'graduation';
-                break;
-            case 'School Event':
-                packageType = 'schoolEvent';
-                break;
-            case 'Holiday Party':
-                packageType = 'holidayParty';
-                break;
-            case 'Other':
-                packageType = 'other';
-                break;
-            default:
-                packageType = 'birthday'; // Default for other event types
-        }
-        
-        // Hide all questions and progress bar
-        document.querySelectorAll('.question-container').forEach(q => {
-            q.classList.remove('active');
-        });
-        document.getElementById('progress-container').style.display = 'none';
-        
-        // Always recommend package based on hours first
-        let recommendedPackage;
-        let missingFeatures = [];
-        
-        // Select package based on hours
-        if (packageType === 'wedding') {
-            // Wedding packages
-            if (hours >= 6) {
-                recommendedPackage = packages.wedding.platinum;
-            } else if (hours >= 4) {
-                recommendedPackage = packages.wedding.gold;
-            } else {
-                recommendedPackage = packages.wedding.silver;
-            }
-            
-            // Show additional hours note for weddings
-            document.getElementById('wedding-hours-note').classList.remove('hidden');
-        } else {
-            // All other event types
-            const packageSet = packages[packageType] || packages.birthday;
-            
-            if (hours >= 4) {
-                recommendedPackage = packageSet.platinum;
-            } else if (hours === 3) {
-                recommendedPackage = packageSet.gold;
-            } else {
-                recommendedPackage = packageSet.silver;
-            }
-            
-            // Hide wedding hours note for non-weddings
-            document.getElementById('wedding-hours-note').classList.add('hidden');
-        }
-        
-        // Check for missing features that could be add-ons
-        selectedFeatures.forEach(feature => {
-            if (!recommendedPackage.includes.includes(feature)) {
-                missingFeatures.push(feature);
-            }
-        });
-        
-        // Display recommendation
-        document.getElementById('package-name').textContent = recommendedPackage.name;
-        
-        // Build features list HTML
-        let featuresHTML = '<ul class="mt-2 space-y-1">';
-        recommendedPackage.features.forEach(feature => {
-            featuresHTML += `<li class="feature-item pl-6">${feature}</li>`;
-        });
-        featuresHTML += '</ul>';
-        
-        document.getElementById('package-details').innerHTML = `
-            <p class="mb-2"><strong>${hours} hours</strong> of photobooth fun</p>
-            ${featuresHTML}
-        `;
-        
-        // Show add-on message if there are missing features
-        if (missingFeatures.length > 0) {
-            document.getElementById('add-on-message').classList.remove('hidden');
-            
-            // Create message about add-ons
-            let addOnText = "We noticed you're interested in ";
-            
-            if (missingFeatures.length === 1) {
-                addOnText += `the ${missingFeatures[0]} feature, which can be added to your package! `;
-            } else {
-                const lastFeature = missingFeatures.pop();
-                addOnText += `${missingFeatures.join(', ')} and ${lastFeature} features, which can be added to your package! `;
-            }
-            
-            addOnText += "Contact us to customize your experience with these add-ons.";
-            document.getElementById('add-on-text').textContent = addOnText;
-        } else {
-            document.getElementById('add-on-message').classList.add('hidden');
-        }
-        
-        // Show thank you section
-        document.getElementById('thank-you-section').classList.add('active');
-    });
-
-    // Initialize
-    document.addEventListener('DOMContentLoaded', function() {
-        showQuestion(1);
-    });
-</script>
+    </script>
+</body>
+</html>
